@@ -57,12 +57,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const users = require("./routes/users");
+const factCheck = require("./routes/factCheck");
 
 app.get("/", (req, res) => {
   res.send("hello, welcome to True Lens");
 });
 
 app.use("/api/auth", users);
+app.use("/api/fact-check", factCheck);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
