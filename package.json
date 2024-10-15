@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/lambeboluwatife/true-lens-backend#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@hapi/joi": "^17.1.1",
     "@types/cors": "^2.8.17",
     "axios": "^1.7.7",
