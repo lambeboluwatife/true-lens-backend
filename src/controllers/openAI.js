@@ -1,6 +1,7 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
 const OpenAI = require("openai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 dotenv.config({ path: "./src/config/config.env" });
 
 const openai = new OpenAI({
@@ -8,6 +9,7 @@ const openai = new OpenAI({
 });
 
 exports.openAISearch = async (req, res) => {
+  const { query } = req.body;
   //   try {
   //     const completion = await openai.chat.completions.create({
   //       model: "gpt-4o-mini",
@@ -32,22 +34,31 @@ exports.openAISearch = async (req, res) => {
   //     });
   //   }
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: "eminem is dead" }],
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-      }
-    );
+    // const response = await axios.post(
+    //   "https://api.openai.com/v1/chat/completions",
+    //   {
+    //     model: "gpt-3.5-turbo",
+    //     messages: [{ role: "user", content: "eminem is dead" }],
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    //     },
+    //   }
+    // );
 
-    const chatResponse = response.data.choices[0].message.content;
+    // const chatResponse = response.data.choices[0].message.content;
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    res.json({ message: chatResponse });
+    const prompt = `
+      I'm investigating the claim that ${query} is false/misleading. Has this been proven false by reliable sources, or is there credible evidence supporting it? Please provide related articles or sources that either debunk or verify this information.
+    `;
+
+    const result = await model.generateContent(prompt);
+    console.log(result.response.text());
+
+    res.json({ google: result.response.text() });
   } catch (error) {
     console.error("Error with ChatGPT API:", error);
     res
