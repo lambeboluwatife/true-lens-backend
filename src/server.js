@@ -17,7 +17,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://eventful-frontend.vercel.app",
+  "https://true-lens-frontend.vercel.app/",
 ];
 
 const corsOptions = {
@@ -58,6 +58,8 @@ app.use(passport.session());
 
 const users = require("./routes/users");
 const factCheck = require("./routes/factCheck");
+const newsApi = require("./routes/newsApi");
+const openAI = require("./routes/openAI");
 
 app.get("/", (req, res) => {
   res.send("hello, welcome to True Lens");
@@ -65,6 +67,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", users);
 app.use("/api/fact-check", factCheck);
+app.use("/api/news-api", newsApi);
+app.use("/api/openai", openAI);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

@@ -39,6 +39,7 @@
     "node-cache": "^5.1.2",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.15",
+    "openai": "^4.67.3",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0"
   },
