@@ -17,10 +17,6 @@ const userSchema = {
     unique: true,
     trim: true,
   },
-  profilePicture: {
-    type: String,
-    required: [true, "Please provide a profile picture"],
-  },
   password: {
     type: String,
     required: [true, "Please enter your password"],
