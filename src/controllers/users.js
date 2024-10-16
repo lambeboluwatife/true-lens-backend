@@ -5,26 +5,8 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const { sendWelcomeEmail } = require("../utils/sendEmails");
 
-const { cloudinary } = require("../config/cloudinaryConfig");
-const fs = require("fs");
-
 exports.registerUser = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded",
-      });
-    }
-
-    const result = await cloudinary.uploader.upload(req.file.path);
-
-    fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-
     const validInputs = await authSchema.validateAsync(req.body);
 
     User.findOne({ email: validInputs.email }).then((user) => {
@@ -36,7 +18,6 @@ exports.registerUser = async (req, res) => {
       } else {
         const newUser = new User({
           ...validInputs,
-          profilePicture: result.secure_url,
         });
 
         // Mash Password
