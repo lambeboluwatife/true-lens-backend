@@ -38,7 +38,17 @@ exports.openAISearch = async (req, res) => {
 
         const result = await model.generateContent(prompt);
 
-        res.status(200).json({ response: result.response.text() });
+        const factCheckResponse = await axios.get(
+          `https://factchecktools.googleapis.com/v1alpha1/claims:search?query=${query}&key=${process.env.GOOGLE_FACT_CHECKER_API_KEY}`
+        );
+
+        const factCheckResults = factCheckResponse.data.claims;
+
+        return res.status(200).json({
+          status: true,
+          gemini: result.response.text(),
+          factCheck: factCheckResults,
+        });
       } catch (error) {
         console.error("Error with Geminis API:", error);
         res
